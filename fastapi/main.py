@@ -35,10 +35,14 @@ app.add_middleware(
 
 def generate_token(data: dict) -> str:
     # 有効期限を設定
+    # トークンの有効期限を現在時刻から指定した時間（ACCESS_TOKEN_EXPIRE_HOURS）だけ加算して設定
     expire = datetime.utcnow() + timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS)
+    # トークンデータに有効期限のタイムスタンプ（秒単位）を追加
     data.update({"exp": expire.timestamp()})
-    # トークンを生成
+    # JWTトークンの生成:
+    # トークンデータをシークレットキーとアルゴリズムを使ってJWTトークンにエンコード
     token = jwt.encode(data, SECRET_KEY, ALGORITHM)
+    # エンコードされたトークンを返す
     return token
 
 
@@ -50,16 +54,27 @@ token_checker = TokenChecker(secret_key=SECRET_KEY, algorithm=ALGORITHM)
 
 def get_token_data(token: str):
     try:
+        # トークンをデコードしてペイロードを取得
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        # ペイロードから有効期限（exp）を取得
         exp = payload.get('exp')
+        # もし有効期限があれば
         if exp:
+            # 現在時刻との差を計算して残り秒数を取得
             remaining_seconds = exp - datetime.utcnow().timestamp()
+            # JSON形式で残り秒数を返す
             return {"remaining_seconds": int(remaining_seconds)}
+        # もし有効期限が無ければ
         else:
+            # httpレスポンスのエラーで返す
             raise HTTPException(status_code=400, detail="トークンの有効期限がありません")
+    # 期限切れ署名エラー
     except jwt.ExpiredSignatureError:
+        # httpレスポンスのエラーで返す
         raise HTTPException(status_code=401, detail="トークンの有効期限が切れています")
+    # 無効なトークンエラー
     except jwt.InvalidTokenError:
+        # httpレスポンスのエラーで返す
         raise HTTPException(status_code=401, detail="無効なトークンです")
 
 # ログインエンドポイント
@@ -85,12 +100,6 @@ async def login():
 def check_token(token_data: dict):
     token = token_data.get("token")
     return get_token_data(token)
-
-# 新たに追加：Pydanticモデルの定義
-
-
-class TokenData(BaseModel):
-    token: str
 
 
 # アプリを起動
