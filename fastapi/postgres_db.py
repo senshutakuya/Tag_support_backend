@@ -4,6 +4,7 @@ import psycopg2
 
 # PostgreSQLに接続するための情報
 DATABASE_URL = "postgresql://test_senshu:test_pass@localhost/mydatabase"
+# DATABASE_URL = "postgresql://test_senshu:test_pass@18.183.195.124:5432/mydatabase"
 
 # PostgreSQLに接続
 conn = psycopg2.connect(DATABASE_URL)
