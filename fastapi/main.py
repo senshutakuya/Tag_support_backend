@@ -6,8 +6,9 @@ from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta, timezone
 import jwt
 import secrets
-from pydantic import BaseModel  # 追加：Pydanticのインポート
+# from pydantic import BaseModel  # 追加：Pydanticのインポート
 from token_checker import TokenChecker  # TokenCheckerクラスのインポート
+from room import Room
 
 app = FastAPI()
 
@@ -19,7 +20,10 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 3
 
 # OAuth2パスワードベアラーを設定
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+# ルームをインスタンス化
+rooms = Room()
 
 # CORSミドルウェアの設定
 app.add_middleware(
@@ -100,6 +104,16 @@ async def login():
 def check_token(token_data: dict):
     token = token_data.get("token")
     return get_token_data(token)
+
+
+@app.get("/room/search/{room_name}")
+def room_search(room_name: str):
+    # 部屋名がリストに存在するかどうかを確認
+    for room in rooms:
+        if room_name.lower() in room["name"].lower():
+            return {"message": "部屋が見つかりました", "room": room}
+    # 見つからなかった場合
+    raise HTTPException(status_code=404, detail="該当する部屋が見つかりません")
 
 
 # アプリを起動
