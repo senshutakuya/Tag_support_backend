@@ -5,31 +5,26 @@ from classes.player import Player
 
 rooms = []
 
-#テスト用プレイヤー作成
-yoshida = Player(uuid.uuid4(), "Yoshida")
-
 # 部屋の作成
 def create_room(name: str, max_members: int = 4) -> Room:
+    global rooms
     # fix: idは uuidでもいいかも。
     id = uuid.uuid4()
-    room = Room(id, name, max_members)
+    room = Room(id=id, name=name, max_members=max_members)
     rooms.append(room)
     return room
 
 # 部屋の削除
-def delete_room(id: str) -> bool:
-    room_obj = None
-    for room in rooms:
-        if room.id == id:
-            room_obj = room
-    if room_obj is None:
-        return False
-    for member in room_obj.members:
+def delete_room(room: Room) -> bool:
+    global rooms
+    for member in room.members:
         member.room_id = None
-    rooms.remove(room_obj)
+    rooms.remove(room)
+    del room
     gc.collect()
 
 def get_room_from_uuid(id: str) -> Room:
+    global rooms
     res = None
     for room in rooms:
         if room.id == id:
@@ -37,6 +32,7 @@ def get_room_from_uuid(id: str) -> Room:
     return res
 
 def get_room_from_name(name: str) -> Room:
+    global rooms
     res = None
     for room in rooms:
         if room.name == name:
