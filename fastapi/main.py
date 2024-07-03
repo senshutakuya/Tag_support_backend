@@ -110,14 +110,24 @@ def check_token(token_data: dict):
 
 @app.post("/room/search/{room_name}")
 # 第一引数にプレイヤー情報、第二引数にルーム名を入れて送信してもらう
-def room_search(player_info, room_name):
+async def room_search(player_info, room_name):
     # プレイヤー情報からトークンを取得してチェック
     check_token(player_info)
     # 部屋を検索して入る処理
     Room.join_room(player_info, room_name)
     # 部屋とそのメンバーを返します。
     for room in Room.rooms:
-        return {"room_name": room.name, "member": [player.name for player in room.members]}
+        return {"Entry_Flag":"TrueかFalse", "chat_message":"プレイヤー '{player}' が '{self.name}' に参加しました。", "room_id":room.id, "room_name": room.name, "member": [player.name for player in room.members]}
+
+# 入れたかどうかをTrueかFalse
+
+# チャットに入出の情報を与えないといけない(websocket対応にして全体通知)
+
+# ルームID
+
+# ルーム名
+
+# その地点でのメンバーの情報
 
 
 # アプリを起動

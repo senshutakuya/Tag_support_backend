@@ -119,46 +119,46 @@ class Room:
             return False
 
 
-# テスト用の実行コード
-if __name__ == "__main__":
-    # 新しいユーザーを作成
-    # Player.py をインポートして Player クラスを利用する
-    player_a = Player(uuid="1", name="Player A", image=b"")
-    player_b = Player(uuid="2", name="Player B", image=b"")
-    player_c = Player(uuid="3", name="Player C", image=b"")
-    player_d = Player(uuid="4", name="Player D", image=b"")  # 追加のプレイヤー
-    player_e = Player(uuid="5", name="Player E", image=b"")  # 追加のプレイヤー
+# #テスト用の実行コード
+# if __name__ == "__main__":
+#     # 新しいユーザーを作成
+#     # Player.py をインポートして Player クラスを利用する
+#     player_a = Player(uuid="1", name="Player A", image=b"")
+#     player_b = Player(uuid="2", name="Player B", image=b"")
+#     player_c = Player(uuid="3", name="Player C", image=b"")
+#     player_d = Player(uuid="4", name="Player D", image=b"")  # 追加のプレイヤー
+#     player_e = Player(uuid="5", name="Player E", image=b"")  # 追加のプレイヤー
 
-    # 新しい部屋を作成してテスト
-    room1 = Room.create_room("Room 1", max_members=3)
-    room2 = Room.create_room("Room 2")
+#     # 新しい部屋を作成してテスト
+#     room1 = Room.create_room("Room 1", max_members=3)
+#     room2 = Room.create_room("Room 2")
 
-    # プレイヤーが部屋に参加する例
-    Room.join_room(player_a, "Room 1")
-    Room.join_room(player_b, "Room 1")
-    Room.join_room(player_c, "Room 1")
-    # こいつは参加できないはず
-    Room.join_room(player_d, "Room 1")
-    Room.join_room(player_e, "Room 2")
+#     # プレイヤーが部屋に参加する例
+#     Room.join_room(player_a, "Room 1")
+#     Room.join_room(player_b, "Room 1")
+#     Room.join_room(player_c, "Room 1")
+#     # こいつは参加できないはず
+#     Room.join_room(player_d, "Room 1")
+#     Room.join_room(player_e, "Room 2")
 
-    # 部屋のメンバーを表示してテスト
-    for room in Room.rooms:
-        print(
-            f"Room '{room.name}' メンバー一覧: {[player.name for player in room.members]} 最大人数: {room.max_members}")
+#     # 部屋のメンバーを表示してテスト
+#     for room in Room.rooms:
+#         print(
+#             f"Room '{room.name}' メンバー一覧: {[player.name for player in room.members]} 最大人数: {room.max_members}")
 
-    # プレイヤーが部屋から退出する例
-    Room.leave_the_room(player_a)
-    Room.leave_the_room(player_e)
+#     # プレイヤーが部屋から退出する例
+#     Room.leave_the_room(player_a)
+#     Room.leave_the_room(player_e)
 
-    # 退出した部屋の状態を表示してテスト
-    for room in Room.rooms:
-        print(
-            f"中間結果:Room '{room.name}' メンバー一覧: {[player.name for player in room.members]} 最大人数: {room.max_members}")
+#     # 退出した部屋の状態を表示してテスト
+#     for room in Room.rooms:
+#         print(
+#             f"中間結果:Room '{room.name}' メンバー一覧: {[player.name for player in room.members]} 最大人数: {room.max_members}")
 
-    # 再度入室
-    Room.join_room(player_d, "Room 1")
+#     # 再度入室
+#     Room.join_room(player_d, "Room 1")
 
-    # 再度入室した部屋の状態を表示してテスト
-    for room in Room.rooms:
-        print(
-            f"最終結果:Room '{room.name}' メンバー一覧: {[player.name for player in room.members]} 最大人数: {room.max_members}")
+#     # 再度入室した部屋の状態を表示してテスト
+#     for room in Room.rooms:
+#         print(
+#             f"最終結果:Room '{room.name}' メンバー一覧: {[player.name for player in room.members]} 最大人数: {room.max_members}")
