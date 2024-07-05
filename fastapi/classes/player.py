@@ -1,14 +1,19 @@
 class Player:
-    def __init__(self,uuid: str, name: str, image: bytes) -> None:
-        self.uuid = uuid
+    def __init__(self, id: str, name: str, image: bytes = None) -> None:
+        self.id = id
         self.name = name
         self.image = image
         self.pos = None
-        self.room_id = None
+        self.room = None
         self.caught = False
         self.playing = False
 
-    # 部屋に入った時に部屋のIDを取得する
-    def join_room(self, id: int) -> bool:
-        self.room_id = id
-        return True
+    def join_room(self, room) -> bool:
+        if self.room is not None:
+            return False
+        return room.join(self)
+
+    def quit_room(self) -> bool:
+        if self.room is None:
+            return False
+        return self.room.quit(self)
